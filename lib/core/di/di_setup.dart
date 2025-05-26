@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
-import 'package:lyriverse/core/data_source/dio/dio_data_source.dart';
-import 'package:lyriverse/core/data_source/dio/dio_data_source_impl.dart';
 import 'package:lyriverse/core/helper/network_helper.dart';
+import 'package:lyriverse/core/network/data_source/dio_http_client.dart';
+import 'package:lyriverse/core/network/data_source/http_client.dart';
 import 'package:lyriverse/track/data/data_source/remote_track_data_source_impl.dart';
-import 'package:lyriverse/track/domain/data_source/track_data_source.dart';
+import 'package:lyriverse/track/data/data_source/track_data_source.dart';
 
 final getIt = GetIt.instance;
 
@@ -14,12 +14,12 @@ void di() {
     instanceName: 'lastFmUrl',
   );
   getIt.registerLazySingleton<Dio>(() => NetworkHelper.dio);
-  getIt.registerLazySingleton<DioDataSource>(
-    () => DioDataSourceImpl(dio: getIt<Dio>()),
+  getIt.registerLazySingleton<HttpClient>(
+    () => DioHttpClient(dio: getIt<Dio>()),
   );
   getIt.registerLazySingleton<TrackDataSource>(
     () => RemoteTrackDataSourceImpl(
-      remoteDataSource: getIt<DioDataSource>(),
+      httpClient: getIt<HttpClient>(),
       remoteUrl: getIt<String>(instanceName: 'lastFmUrl'),
     ),
   );
