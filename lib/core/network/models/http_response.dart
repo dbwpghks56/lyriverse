@@ -4,9 +4,13 @@ part 'http_response.freezed.dart';
 
 @freezed
 class HttpResponse<T> with _$HttpResponse<T> {
+  @override
   final T? data;
+  @override
   final int statusCode;
+  @override
   final String? statusMessage;
+  @override
   final Map<String, dynamic> headers;
 
   const HttpResponse({

@@ -5,10 +5,15 @@ part 'track.freezed.dart';
 
 @freezed
 class Track with _$Track {
+  @override
   final String name;
+  @override
   final String playCount;
+  @override
   final String listeners;
+  @override
   final String artist;
+  @override
   final List<TrackImage> images;
 
   const Track({
