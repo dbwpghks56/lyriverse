@@ -5,6 +5,8 @@ import 'package:lyriverse/core/network/data_source/impl/dio_http_client.dart';
 import 'package:lyriverse/core/network/data_source/http_client.dart';
 import 'package:lyriverse/track/data/data_source/impl/remote_track_data_source_impl.dart';
 import 'package:lyriverse/track/data/data_source/track_data_source.dart';
+import 'package:lyriverse/track/data/repository/track_repository_impl.dart';
+import 'package:lyriverse/track/domain/repository/track_repository.dart';
 
 final getIt = GetIt.instance;
 
@@ -17,10 +19,15 @@ void di() {
   getIt.registerLazySingleton<HttpClient>(
     () => DioHttpClient(dio: getIt<Dio>()),
   );
+
+  // Track DI
   getIt.registerLazySingleton<TrackDataSource>(
     () => RemoteTrackDataSourceImpl(
       httpClient: getIt<HttpClient>(),
       remoteUrl: getIt<String>(instanceName: 'lastFmUrl'),
     ),
+  );
+  getIt.registerLazySingleton<TrackRepository>(
+    () => TrackRepositoryImpl(dataSource: getIt<TrackDataSource>()),
   );
 }
