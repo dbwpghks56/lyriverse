@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:lyriverse/core/di/di_setup.dart';
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: 'assets/.env');
+
+  di();
+
   runApp(const MyApp());
 }
 
