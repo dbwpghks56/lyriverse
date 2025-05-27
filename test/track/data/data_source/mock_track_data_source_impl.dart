@@ -27,7 +27,7 @@ class MockTrackDataSourceImpl implements TrackDataSource {
         }).toList();
 
     int totalCount = filteredTracks.length;
-    int offset = pagination.page;
+    int offset = pagination.page == 0 ? 1 : pagination.page;
     int limit = pagination.limit;
     final int totalPages = (totalCount / pagination.limit).ceil();
 
