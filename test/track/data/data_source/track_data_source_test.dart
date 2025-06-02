@@ -28,6 +28,7 @@ void main() {
             ),
           );
 
+      expect(dtoPagination.items.first, isA<TrackDto>());
       expect(dtoPagination.items.length, 5);
     });
     test('노래 제목과 페이지네이션, 가수까지 포함하여 검색되어야 한다.', () async {
@@ -41,6 +42,7 @@ void main() {
             ),
           );
 
+      expect(dtoPagination.items.first, isA<TrackDto>());
       expect(dtoPagination.items.length, 10);
     });
   });
