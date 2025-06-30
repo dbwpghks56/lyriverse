@@ -1,3 +1,4 @@
+import 'package:lyriverse/artist/data/mapper/artist_mapper.dart';
 import 'package:lyriverse/track/data/dto/track_dto.dart';
 import 'package:lyriverse/track/data/mapper/track_image_mapper.dart';
 import 'package:lyriverse/track/domain/model/track.dart';
@@ -5,11 +6,11 @@ import 'package:lyriverse/track/domain/model/track.dart';
 extension TrackDtoMapper on TrackDto {
   Track toModel() {
     return Track(
+      id: id ?? 'N/A',
       name: name ?? 'N/A',
-      playCount: playCount ?? '0',
-      listeners: listeners ?? '0',
+      type: type ?? 'N/A',
       images: images?.map((image) => image.toModel()).toList() ?? [],
-      artist: artist ?? 'N/A',
+      artists: artists?.map((artist) => artist.toModel()).toList() ?? [],
     );
   }
 }
@@ -17,11 +18,11 @@ extension TrackDtoMapper on TrackDto {
 extension TrackMapper on Track {
   TrackDto toDto() {
     return TrackDto(
+      id: id,
       name: name,
-      playCount: playCount,
-      listeners: listeners,
+      type: type,
       images: images.map((image) => image.toDto()).toList(),
-      artist: artist,
+      artists: artists.map((artist) => artist.toDto()).toList(),
     );
   }
 }
