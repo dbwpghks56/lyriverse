@@ -5,12 +5,14 @@ part 'track_image.freezed.dart';
 @freezed
 class TrackImage with _$TrackImage {
   @override
-  final String imageUrl;
+  final String url;
   @override
-  final String size;
+  final int width;
+  final int height;
 
   const TrackImage({
-    required this.imageUrl,
-    required this.size,
+    required this.url,
+    required this.width,
+    required this.height,
   });
 }

@@ -4,8 +4,9 @@ import 'package:lyriverse/track/domain/model/track_image.dart';
 extension TrackImageDtoMapper on TrackImageDto {
   TrackImage toModel() {
     return TrackImage(
-      imageUrl: imageUrl ?? 'N/A',
-      size: size ?? '0',
+      url: url ?? 'N/A',
+      width: width ?? 0,
+      height: height ?? 0,
     );
   }
 }
@@ -13,8 +14,9 @@ extension TrackImageDtoMapper on TrackImageDto {
 extension TrackImageMapper on TrackImage {
   TrackImageDto toDto() {
     return TrackImageDto(
-      imageUrl: imageUrl,
-      size: size,
+      url: url,
+      width: width,
+      height: height,
     );
   }
 }
