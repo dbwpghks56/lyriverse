@@ -20,7 +20,9 @@ abstract class NetworkHelper {
           // API 키 자동 추가
           final apiKey = dotenv.env['LASTFM_KEY'];
           if (apiKey != null) {
-            options.queryParameters['api_key'] = apiKey;
+            if (options.path.contains('audioscrobbler')) {
+              options.queryParameters['api_key'] = apiKey;
+            }
           }
 
           return handler.next(options);
