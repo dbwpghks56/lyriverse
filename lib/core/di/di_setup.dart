@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lyriverse/core/helper/network_helper.dart';
+import 'package:lyriverse/core/local/data_source/impl/pref_client.dart';
+import 'package:lyriverse/core/local/data_source/local_client.dart';
 import 'package:lyriverse/core/network/data_source/impl/dio_http_client.dart';
 import 'package:lyriverse/core/network/data_source/http_client.dart';
 import 'package:lyriverse/lyric/data/data_source/impl/remote_lyric_data_source.dart';
@@ -11,6 +13,7 @@ import 'package:lyriverse/track/data/data_source/impl/remote_track_data_source_i
 import 'package:lyriverse/track/data/data_source/track_data_source.dart';
 import 'package:lyriverse/track/data/repository/track_repository_impl.dart';
 import 'package:lyriverse/track/domain/repository/track_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final getIt = GetIt.instance;
 
@@ -23,9 +26,16 @@ void di() {
     'https://lrclib.net/api/get',
     instanceName: 'lyricUrl',
   );
+  getIt.registerSingletonAsync<SharedPreferences>(
+    () async => await SharedPreferences.getInstance(),
+  );
+
   getIt.registerLazySingleton<Dio>(() => NetworkHelper.dio);
   getIt.registerLazySingleton<HttpClient>(
     () => DioHttpClient(dio: getIt<Dio>()),
+  );
+  getIt.registerLazySingleton<LocalClient>(
+    () => PrefClient(sharedPreferences: getIt<SharedPreferences>()),
   );
 
   // Track DI
