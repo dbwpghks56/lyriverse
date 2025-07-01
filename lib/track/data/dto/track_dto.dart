@@ -7,13 +7,9 @@ part 'track_dto.g.dart';
 @JsonSerializable(explicitToJson: true)
 class TrackDto {
   final String? id;
-  @override
   final String? name;
-  @override
   final String? type;
-  @override
   final List<ArtistDto>? artists;
-  @override
   final List<TrackImageDto>? images;
 
   const TrackDto({
