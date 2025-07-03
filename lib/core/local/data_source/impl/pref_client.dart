@@ -10,18 +10,22 @@ class PrefClient implements LocalClient {
   Future<int> getInt(String key) async {
     final int? value = sharedPreferences.getInt(key);
 
-    if (value == null) {}
+    if (value == null) {
+      throw Exception('No value found for key: $key');
+    }
 
-    return value!;
+    return value;
   }
 
   @override
   Future<String> getString(String key) async {
     final String? value = sharedPreferences.getString(key);
 
-    if (value == null) {}
+    if (value == null) {
+      throw Exception('No value found for key: $key');
+    }
 
-    return value!;
+    return value;
   }
 
   @override
