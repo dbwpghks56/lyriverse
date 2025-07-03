@@ -9,6 +9,8 @@ import 'package:lyriverse/lyric/data/data_source/impl/remote_lyric_data_source.d
 import 'package:lyriverse/lyric/data/data_source/lyric_data_source.dart';
 import 'package:lyriverse/lyric/data/repository/lyric_repository_impl.dart';
 import 'package:lyriverse/lyric/domain/repository/lyric_repository.dart';
+import 'package:lyriverse/spotify_auth/data/data_source/impl/spotify_auth_data_source_impl.dart';
+import 'package:lyriverse/spotify_auth/data/data_source/spotify_auth_data_source.dart';
 import 'package:lyriverse/track/data/data_source/impl/remote_track_data_source_impl.dart';
 import 'package:lyriverse/track/data/data_source/track_data_source.dart';
 import 'package:lyriverse/track/data/repository/track_repository_impl.dart';
@@ -23,13 +25,17 @@ void di() {
     instanceName: 'lastFmUrl',
   );
   getIt.registerSingleton<String>(
+    'https://accounts.spotify.com/api/token',
+    instanceName: 'spotifyAuth',
+  );
+  getIt.registerSingleton<String>(
     'https://lrclib.net/api/get',
     instanceName: 'lyricUrl',
   );
+
   getIt.registerSingletonAsync<SharedPreferences>(
     () async => await SharedPreferences.getInstance(),
   );
-
   getIt.registerLazySingleton<Dio>(() => NetworkHelper.dio);
   getIt.registerLazySingleton<HttpClient>(
     () => DioHttpClient(dio: getIt<Dio>()),
@@ -58,5 +64,13 @@ void di() {
   );
   getIt.registerLazySingleton<LyricRepository>(
     () => LyricRepositoryImpl(dataSource: getIt<LyricDataSource>()),
+  );
+
+  // Spotify Auth DI
+  getIt.registerLazySingleton<SpotifyAuthDataSource>(
+    () => SpotifyAuthDataSourceImpl(
+      httpClient: getIt<HttpClient>(),
+      remoteUrl: getIt<String>(instanceName: 'spotifyAuth'),
+    ),
   );
 }
