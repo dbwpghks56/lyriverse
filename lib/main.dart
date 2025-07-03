@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:lyriverse/core/di/di_setup.dart';
+import 'package:lyriverse/spotify_auth/data/data_source/spotify_auth_data_source.dart';
 
 void main() async {
   await dotenv.load(fileName: 'assets/.env');
 
-  di();
+  await di();
+
+  final SpotifyAuthDataSource dataSource = getIt<SpotifyAuthDataSource>();
+
+  print((await dataSource.getAccessToken()).accessToken);
 
   runApp(const MyApp());
 }
