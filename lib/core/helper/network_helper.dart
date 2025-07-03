@@ -1,11 +1,13 @@
 // lib/core/helper/network_helper.dart
 import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:lyriverse/core/helper/token_refresh_helper.dart';
+import 'package:lyriverse/core/local/data_source/local_client.dart';
 
 abstract class NetworkHelper {
-  static final Dio dio = _createDio();
-
-  static Dio _createDio() {
+  static Dio createDio({
+    LocalClient? localClient,
+    TokenRefreshHelper? tokenRefreshHelper,
+  }) {
     final dio = Dio(
       BaseOptions(
         connectTimeout: const Duration(seconds: 10),
@@ -16,12 +18,29 @@ abstract class NetworkHelper {
 
     dio.interceptors.add(
       InterceptorsWrapper(
-        onRequest: (options, handler) {
-          // API 키 자동 추가
-          final apiKey = dotenv.env['LASTFM_KEY'];
-          if (apiKey != null) {
-            if (options.path.contains('audioscrobbler')) {
-              options.queryParameters['api_key'] = apiKey;
+        onRequest: (options, handler) async {
+          if (_isSpotifyUrl(options.uri.toString())) {
+            if (tokenRefreshHelper != null) {
+              final accessToken =
+                  await tokenRefreshHelper.getValidSpotifyToken();
+              if (accessToken != null) {
+                options.headers['Authorization'] = accessToken;
+              }
+            } else if (localClient != null) {
+              try {
+                final accessToken = await localClient.getString('accessToken');
+                final expiresDate = await localClient.getString('expiresDate');
+
+                if (!_isTokenExpired(expiresDate)) {
+                  options.headers['Authorization'] = accessToken;
+                } else {
+                  print(
+                    'Spotify token expired and no refresh helper available',
+                  );
+                }
+              } catch (e) {
+                print('Failed to get Spotify token: $e');
+              }
             }
           }
 
@@ -38,4 +57,20 @@ abstract class NetworkHelper {
 
     return dio;
   }
+
+  static bool _isSpotifyUrl(String url) {
+    return url.contains('api.spotify.com') || url.contains('scdn.co');
+  }
+
+  static bool _isTokenExpired(String expiresDateString) {
+    try {
+      final expiresDate = DateTime.parse(expiresDateString);
+      return DateTime.now().isAfter(expiresDate);
+    } catch (e) {
+      return true;
+    }
+  }
+
+  @Deprecated('Use createDio() instead')
+  static final Dio dio = createDio();
 }
