@@ -25,8 +25,8 @@ final getIt = GetIt.instance;
 
 Future<void> di() async {
   getIt.registerSingleton<String>(
-    'https://ws.audioscrobbler.com/2.0/',
-    instanceName: 'lastFmUrl',
+    'https://api.spotify.com/v1/',
+    instanceName: 'spotify',
   );
   getIt.registerSingleton<String>(
     'https://accounts.spotify.com/api/token',
@@ -103,7 +103,7 @@ Future<void> di() async {
   getIt.registerLazySingleton<TrackDataSource>(
     () => RemoteTrackDataSourceImpl(
       httpClient: getIt<HttpClient>(),
-      remoteUrl: getIt<String>(instanceName: 'lastFmUrl'),
+      remoteUrl: getIt<String>(instanceName: 'spotify'),
     ),
   );
 

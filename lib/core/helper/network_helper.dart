@@ -59,7 +59,7 @@ abstract class NetworkHelper {
   }
 
   static bool _isSpotifyUrl(String url) {
-    return url.contains('api.spotify.com') || url.contains('scdn.co');
+    return url.contains('api.spotify.com');
   }
 
   static bool _isTokenExpired(String expiresDateString) {
