@@ -4,11 +4,15 @@ part 'track_image_dto.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class TrackImageDto {
-  @JsonKey(name: '#text')
-  final String? imageUrl;
-  final String? size;
+  final String? url;
+  final int? width;
+  final int? height;
 
-  const TrackImageDto({required this.imageUrl, required this.size});
+  const TrackImageDto({
+    required this.url,
+    required this.width,
+    required this.height,
+  });
 
   factory TrackImageDto.fromJson(Map<String, dynamic> json) =>
       _$TrackImageDtoFromJson(json);
